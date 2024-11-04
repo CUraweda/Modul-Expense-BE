@@ -1,0 +1,49 @@
+GET http://localhost:5000/users
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoiYWRtaW4iLCJuYW1hIjoicmVpbXMiLCJyb2xlIjoiQWRtaW4iLCJpYXQiOjE3Mjc3NjQwMTUsImV4cCI6MTcyNzc2NDAzNX0.82BF-Rr1XTrlJWMFp8HcI5MsyLE0L90uErrx-J4rAow
+
+###
+POST http://localhost:5000/users
+Content-Type: application/json
+
+{
+    "username":"admin1",
+    "nama":"reims",
+    "role":"Admin",
+    "password":"12345678",
+    "confPassword":"1234567"
+}
+
+###
+POST http://localhost:5000/login
+Content-Type: application/json
+
+{
+    "username" : "admin",
+    "password": "12345678"
+}
+
+###
+GET http://localhost:5000/token
+
+###
+POST http://localhost:5000/expenses
+Content-Type: application/json
+
+{
+    "title": "makan siang",
+    "date": "2024-10-15",
+    "description": "makan siang bersama atmin",
+    "cost": 100000,
+    "type": "Non-Operasional",
+    "category": "Pribadi"
+}
+
+###
+GET http://localhost:5000/expenses
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsInVzZXJuYW1lIjoiYWRtaW4iLCJuYW1hIjoicmVpbXMiLCJyb2xlIjoiQWRtaW4iLCJpYXQiOjE3MjkxMzM4MTUsImV4cCI6MTcyOTEzMzgzMH0.9ZdwP3L1Xih5pL4OKPTYNWYqPFmHlxUJ0hChd8YZpv0
+
+###
+GET http://localhost:5000/expenses/total
+
+###
+GET http://localhost:5000/expenses/summary
