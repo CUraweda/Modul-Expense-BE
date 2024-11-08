@@ -82,7 +82,7 @@ export const getExpenses = async(req, res) => {
 export const VerifyExpenses = async(req, res) => {
   try {
       const expenses = await Expense.findAll({
-          attributes:['id','title','date','type','reporter','cost','status'],
+          attributes:['id','title','date','type','reporter','cost','status','komentar'],
       });
       res.status(200).json(expenses);
   } catch (error){
