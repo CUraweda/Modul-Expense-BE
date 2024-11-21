@@ -6,7 +6,11 @@ const {
 const bcryptHelper = require("../../helpers/bcrypt.helper");
 
 const getUsers = async () => {
-  return await prismaClient.user.findMany();
+  return await prismaClient.user.findMany({
+    include: {
+      role: true
+    }
+  });
 };
 
 const getUser = async (userId) => {

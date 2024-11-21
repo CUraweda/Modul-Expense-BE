@@ -23,13 +23,11 @@ const authentication = async (req, res, next) => {
   const token = authHeader.split(" ")[1];
 
   try {
-    // Memverifikasi token
+   
     const decoded = await jwtHelper.verifyToken(token);
 
-    // Menyimpan informasi pengguna di request untuk digunakan di route berikutnya
     req.user = decoded;
 
-    // Lanjut ke middleware atau route handler berikutnya
     next();
   } catch (err) {
     var code = "INVALID_TOKEN";

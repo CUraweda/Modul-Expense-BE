@@ -15,7 +15,7 @@ model User {
   createdAt DateTime  @default(now())
   email     String    @unique
   name      String?
-  password String
+  password  String
   roleId    Int
   role      Role      @relation(fields: [roleId], references: [id])
   expense   Expense[]
@@ -31,7 +31,7 @@ model Expense {
   userId      Int
   user        User     @relation(fields: [userId], references: [id])
   description String?
-  biaya       Int
+  biaya       Float
   status      String
 }
 
@@ -39,6 +39,7 @@ model Kategori {
   id        Int       @id @default(autoincrement())
   createdAt DateTime  @default(now())
   name      String
+  status    Boolean?
   expense   Expense[]
 }
 
