@@ -12,6 +12,7 @@ router.get("/users", userController.getUsers);
 router.post("/users", userController.createUser);
 router.get("/users/:userId(\\d+)/", userController.getUser);
 router.delete("/users/:userId(\\d+)/", userController.deleteUser);
-router.put("/users/:userId(\\d+)/", userController.updateUser);
+router.patch("/users/:userId", userController.updateUser);
+router.patch("/users-reset-password/:userId", userController.updatePassword);
 
 module.exports = router;

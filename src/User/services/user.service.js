@@ -25,14 +25,28 @@ const createUser = async (user) => {
 
 const deleteUser = async (userId) => {
   await getUser(userId);
-  return userRepository.deleteUser(userId);
+  return userRepository.deleteUser(Number(userId));
 };
 
 const updateUser = async (userId, data) => {
   await getUser(userId);
 
   const updatedUser = await userRepository.updateUser(userId, data);
+
   return updatedUser;
 };
 
-module.exports = { getUsers, getUser, createUser, deleteUser, updateUser };
+const updatePassword = async (userId, data) => {
+  await getUser(userId);
+  const updatedUser = await userRepository.updatePassword(Number(userId), data);
+  return updatedUser;
+};
+
+module.exports = {
+  getUsers,
+  getUser,
+  createUser,
+  deleteUser,
+  updateUser,
+  updatePassword,
+};

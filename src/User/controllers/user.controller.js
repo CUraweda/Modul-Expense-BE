@@ -82,6 +82,7 @@ const updateUser = async (req, res, next) => {
         }
 
         const {userId} = req.params
+        
         const user = await userService.updateUser(userId, value);
         
         return res.status(httpStatus.OK).json({
@@ -90,8 +91,32 @@ const updateUser = async (req, res, next) => {
             error: null
         });
     } catch (err) {
+        console.log(err);
+        
+        next(err)
+    }
+};
+const updatePassword = async (req, res, next) => {
+    try {
+        const {error, value} = updateUserSchema.validate(req.body, { abortEarly: false });
+        if (error) {
+            throw new ValidationError(error);
+        }
+
+        const {userId} = req.params
+        
+        const user = await userService.updatePassword(userId, value);
+        
+        return res.status(httpStatus.OK).json({
+            status :  httpStatus.OK,
+            data : user,
+            error: null
+        });
+    } catch (err) {
+        console.log(err);
+        
         next(err)
     }
 };
 
-module.exports = { getUsers, getUser, createUser, deleteUser, updateUser }
+module.exports = { getUsers, getUser, createUser, deleteUser, updateUser, updatePassword }

@@ -8,8 +8,8 @@ const bcryptHelper = require("../../helpers/bcrypt.helper");
 const getUsers = async () => {
   return await prismaClient.user.findMany({
     include: {
-      role: true
-    }
+      role: true,
+    },
   });
 };
 
@@ -49,6 +49,24 @@ const createUser = async (user) => {
     throw new ValidationError(error);
   }
 };
+const updatePassword = async (id, user) => {
+  try {
+    return await prismaClient.$transaction(async (prisma) => {
+      user.password = await bcryptHelper.hash(user.password);
+
+      const createdUser = await prisma.user.update({
+        where: { id },
+        data: {
+          password: user.password,
+        },
+      });
+
+      return createdUser;
+    });
+  } catch (error) {
+    throw new ValidationError(error);
+  }
+};
 
 const deleteUser = async (userId) => {
   return await prismaClient.user.delete({
@@ -62,8 +80,7 @@ const updateUser = async (userId, user) => {
   const userPayload = {
     email: user.email,
     name: user.name,
-    password: user.password,
-    role: user.role,
+    roleId: user.roleId,
   };
 
   return await prismaClient.user.update({
@@ -81,4 +98,5 @@ module.exports = {
   deleteUser,
   updateUser,
   getUserByEmail,
+  updatePassword,
 };

@@ -17,8 +17,8 @@ model User {
   name      String?
   password  String
   roleId    Int
-  role      Role      @relation(fields: [roleId], references: [id])
-  expense   Expense[]
+  role      Role      @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  expense   Expense[] 
 }
 
 model Expense {
@@ -27,9 +27,9 @@ model Expense {
   name        String
   date        DateTime
   kategoriId  Int
-  kategori    Kategori @relation(fields: [kategoriId], references: [id])
+  kategori    Kategori @relation(fields: [kategoriId], references: [id], onDelete: Cascade)
   userId      Int
-  user        User     @relation(fields: [userId], references: [id])
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   description String?
   biaya       Float
   status      String
