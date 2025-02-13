@@ -11,14 +11,22 @@ datasource db {
 }
 
 model User {
-  id        Int       @id @default(autoincrement())
-  createdAt DateTime  @default(now())
-  email     String    @unique
-  name      String?
-  password  String
-  roleId    Int
-  role      Role      @relation(fields: [roleId], references: [id], onDelete: Cascade)
-  expense   Expense[] 
+  id             Int           @id @default(autoincrement())
+  createdAt      DateTime      @default(now())
+  email          String        @unique
+  name           String?
+  password       String
+  roleId         Int
+  role           Role          @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  expense        Expense[]
+  kategoriUserId Int?
+  kategoriUser   KategoriUser? @relation(fields: [kategoriUserId], references: [id], onDelete: Cascade)
+}
+
+model KategoriUser {
+  id   Int    @id @default(autoincrement())
+  name String
+  user User[]
 }
 
 model Expense {

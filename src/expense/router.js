@@ -6,7 +6,8 @@ const { authentication } = require("../middlewares/authentication.middleware");
 
 router.get("/expense/:startDate/:endDate", expenseController.getEkspenses);
 router.get("/expense", expenseController.getEkspenses);
-router.get("/expense-summary", expenseController.getSummaryExpense);
+router.get("/expense-summary/:kategoriId(\\d+)/", expenseController.getSummaryExpense);
+router.get("/expense-summary/", expenseController.getSummaryExpense);
 router.get("/expense-kasir/:userId(\\d+)/", expenseController.getExpenseByKasir);
 router.get("/expense/:expenseId(\\d+)/",expenseController.getExpenseById);
 router.post("/expense", expenseController.createExpense);

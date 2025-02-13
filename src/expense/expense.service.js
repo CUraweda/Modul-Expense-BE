@@ -95,23 +95,36 @@ const updateStatus = async (id, status) => {
 const deleteExpense = async (id) => {
   return await expenseRepo.deleteExpense(id);
 };
-const getSumaryExpense = async () => {
-  const sumarry = await expenseRepo.getExpensesSummary();
-  const sumarryMount = await expenseRepo.getMonthlyExpensesSummary();
-  return (dataRest = {
-    totalCostToday: sumarry.totalDataToday.reduce(
-      (total, expense) => total + expense.biaya,
-      0
-    ),
-    totalCostThisMonth: sumarry.totalDataThisMonth.reduce(
-      (total, expense) => total + expense.biaya,
-      0
-    ),
-    totalExpenseThisMonth: sumarry.totalThisMonth,
 
-    sumarryMount
-  });
+const calculateTotalCost = (expenses) => {
+  return expenses.reduce((total, expense) => total + expense.biaya, 0);
 };
+
+const getSumaryExpense = async (idKategori) => {
+
+  let sumarry = null;
+  let sumarryMount = null;
+
+  if (idKategori) {
+   
+    sumarry = await expenseRepo.getExpensesSummaryByKategori(idKategori);
+    sumarryMount = await expenseRepo.getMonthlyExpensesSummaryByKategori(idKategori);
+  } else {
+    sumarry = await expenseRepo.getExpensesSummary();
+    sumarryMount = await expenseRepo.getMonthlyExpensesSummary();
+  }
+
+  const totalCostToday = calculateTotalCost(sumarry.totalDataToday);
+  const totalCostThisMonth = calculateTotalCost(sumarry.totalDataThisMonth);
+
+  return {
+    totalCostToday,
+    totalCostThisMonth,
+    totalExpenseThisMonth: sumarry.totalThisMonth,
+    sumarryMount,
+  };
+};
+
 
 module.exports = {
   getExpense,

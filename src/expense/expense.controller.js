@@ -100,7 +100,8 @@ const deleteExpense = async (req, res, next) => {
 };
 const getSummaryExpense = async (req, res, next) => {
   try {
-    const expense = await expenseService.getSumaryExpense();
+    const { kategoriId } = req.params;
+    const expense = await expenseService.getSumaryExpense(Number(kategoriId));
     return res.status(httpStatus.OK).json({
       status: httpStatus.OK,
       data: expense,

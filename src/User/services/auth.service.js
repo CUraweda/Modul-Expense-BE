@@ -21,7 +21,8 @@ const login = async(email, password) => {
             refresh_token: refreshToken,
             expires_in: expiresIn,
             role: user?.roleId,
-            userId: user?.id
+            userId: user?.id,
+            kategoriId: user?.kategoriUserId
         }
 
         return token;

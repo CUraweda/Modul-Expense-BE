@@ -126,6 +126,59 @@ const getExpensesSummary = async () => {
     totalThisMonth,
   };
 };
+const getExpensesSummaryByKategori = async (idKategori) => {
+  const today = new Date();
+
+  // Awal dan akhir hari ini
+  const startOfDay = new Date(today.setHours(0, 0, 0, 0));
+  const endOfDay = new Date(today.setHours(23, 59, 59, 999));
+
+  // Awal dan akhir bulan ini
+  const startOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+  const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0);
+  
+  const totalDataToday = await prismaClient.expense.findMany({
+    where: {
+      user: {
+        kategoriUserId: idKategori
+      },
+      createdAt: {
+        gte: startOfDay,
+        lte: endOfDay,
+      },
+    },
+  });
+
+  // Total data bulan ini
+  const totalDataThisMonth = await prismaClient.expense.findMany({
+    where: {
+      user: {
+        kategoriUserId: idKategori
+      },
+      createdAt: {
+        gte: startOfMonth,
+        lte: endOfMonth,
+      },
+    },
+  });
+  const totalThisMonth = await prismaClient.expense.count({
+    where: {
+      user: {
+        kategoriUserId: idKategori
+      },
+      createdAt: {
+        gte: startOfMonth,
+        lte: endOfMonth,
+      },
+    },
+  });
+
+  return {
+    totalDataToday,
+    totalDataThisMonth,
+    totalThisMonth,
+  };
+};
 
 const getMonthlyExpensesSummary = async () => {
   const year = new Date().getFullYear();
@@ -191,6 +244,80 @@ const getMonthlyExpensesSummary = async () => {
     totalRejectedExpenses,
   };
 };
+const getMonthlyExpensesSummaryByKategori = async (idKategori) => {
+  const year = new Date().getFullYear();
+
+  // Array untuk menyimpan hasil
+  const totalExpenses = Array(12).fill(0);
+  const totalApprovedExpenses = Array(12).fill(0);
+  const totalRejectedExpenses = Array(12).fill(0);
+
+  for (let month = 0; month < 12; month++) {
+    const startOfMonth = new Date(year, month, 1);
+    const endOfMonth = new Date(year, month + 1, 0);
+
+    // Total expense untuk bulan ini
+    const totalExpense = await prismaClient.expense.findMany({
+     
+      where: {
+        user: {
+          kategoriUserId: idKategori
+        },
+        createdAt: {
+          gte: startOfMonth,
+          lte: endOfMonth,
+        },
+      },
+    });
+
+    // Total expense dengan status "Disetujui"
+    const totalApprovedExpense = await prismaClient.expense.findMany({
+      where: {
+        user: {
+          kategoriUserId: idKategori
+        },
+        createdAt: {
+          gte: startOfMonth,
+          lte: endOfMonth,
+        },
+        status: "Disetujui",
+      },
+    });
+
+    // Total expense dengan status "Ditolak"
+    const totalRejectedExpense = await prismaClient.expense.findMany({
+      where: {
+        user: {
+          kategoriUserId: idKategori
+        },
+        createdAt: {
+          gte: startOfMonth,
+          lte: endOfMonth,
+        },
+        status: "Ditolak",
+      },
+    });
+
+    totalExpenses[month] =
+      totalExpense.reduce((total, expense) => total + expense.biaya, 0) || 0;
+    totalApprovedExpenses[month] =
+      totalApprovedExpense.reduce(
+        (total, expense) => total + expense.biaya,
+        0
+      ) || 0;
+    totalRejectedExpenses[month] =
+      totalRejectedExpense.reduce(
+        (total, expense) => total + expense.biaya,
+        0
+      ) || 0;
+  }
+
+  return {
+    totalExpenses,
+    totalApprovedExpenses,
+    totalRejectedExpenses,
+  };
+};
 
 module.exports = {
   getExpenses,
@@ -201,4 +328,6 @@ module.exports = {
   getExpensebyKasir,
   getExpensesSummary,
   getMonthlyExpensesSummary,
+  getExpensesSummaryByKategori,
+  getMonthlyExpensesSummaryByKategori
 };

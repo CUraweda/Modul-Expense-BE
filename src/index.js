@@ -6,6 +6,7 @@ const httpStatus = require("http-status-codes");
 const userRoute = require("./User/routes");
 const expenseRoute = require("./expense/router");
 const kategoriRoute = require("./kategori/router")
+const kategoriUserRoute = require("./kategoriUser/router")
 const handleError = require("./exceptions/handler.exception");
 
 const app = express();
@@ -42,6 +43,7 @@ app.use(bodyParser.text({ type: "text/html" }));
 app.use(userRoute);
 app.use(expenseRoute)
 app.use(kategoriRoute)
+app.use(kategoriUserRoute)
 
 app.use((req, res) => {
   return res.json({

@@ -4,7 +4,7 @@ const { ValidationError, GeneralError } = require("../../exceptions/errors.excep
 const { loginSchema } = require("../validations/login.schema");
 
 const login = async (req, res, next) => {
-    console.log('value');
+    
     try {
         const {error, value} = loginSchema.validate(req.body, { abortEarly: false });
         

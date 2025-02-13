@@ -36,7 +36,6 @@ const getUser = async (req, res, next) => {
 const createUser = async (req, res, next) => {
     try {
         const {error, value} = addUserSchema.validate(req.body, { abortEarly: false });
-        console.log(value);
         
         if (error) {
             throw new ValidationError(error.details);

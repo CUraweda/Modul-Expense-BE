@@ -9,6 +9,7 @@ const getUsers = async () => {
   return await prismaClient.user.findMany({
     include: {
       role: true,
+      kategoriUser: true
     },
   });
 };
@@ -26,6 +27,9 @@ const getUserByEmail = async (email) => {
     where: {
       email: email,
     },
+    include: {
+      kategoriUser: true
+    }
   });
 };
 
@@ -33,14 +37,17 @@ const createUser = async (user) => {
   try {
     return await prismaClient.$transaction(async (prisma) => {
       user.password = await bcryptHelper.hash(user.password);
-
+      const userPayload = {
+        email: user.email,
+        name: user.name,
+        roleId: user.role,
+        password: user.password,
+      };
+      if (user.kategoriUserId) {
+        userPayload.kategoriUserId = user.kategoriUserId;
+      }
       const createdUser = await prisma.user.create({
-        data: {
-          email: user.email,
-          name: user.name,
-          password: user.password,
-          roleId: user.role,
-        },
+        data: userPayload,
       });
 
       return createdUser;
@@ -82,6 +89,9 @@ const updateUser = async (userId, user) => {
     name: user.name,
     roleId: user.roleId,
   };
+  if (user.kategoriUserId) {
+    userPayload.kategoriUserId = user.kategoriUserId;
+  }
 
   return await prismaClient.user.update({
     where: {
